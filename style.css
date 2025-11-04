@@ -1,0 +1,103 @@
+
+html,body{
+  height:100%;
+  margin:0;
+}
+
+body{
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:#071727;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:center;
+  direction: rtl;
+  height: auto;
+  padding: 20px;
+}
+
+
+.B_Home_Logo{
+  background-image: url(../static/Home_Logo.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center; /* لتوسيط النص */
+  margin: 10px;
+
+  
+
+  box-shadow:
+    0 10px 10px rgba(0, 0, 0, 0.4), /* ظل ناعم */
+    0 0 0 5px #ffffff; /* هذا هو الفريم الأبيض حول الزر */
+  color: rgb(2, 79, 129);
+
+}
+
+
+
+
+.B_Home{
+  background-color: aliceblue;
+  width: 80%;
+  height: 50px;
+  border-radius: 30px;
+  font-size: 25px;
+  margin: 15px;
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
+   display: flex;
+  align-items: center;
+  justify-content: center; /* لتوسيط النص */
+  position: relative;
+  animation: upDown 2s ease-in-out infinite;
+  
+
+  box-shadow:
+    0 10px 10px rgba(0, 0, 0, 0.4), /* ظل ناعم */
+    0 0 0 5px #ffffff; /* هذا هو الفريم الأبيض حول الزر */
+  color: rgb(2, 79, 129);
+
+}
+
+button:active{
+  background-color: rgb(217, 217, 218);
+}
+
+@keyframes upDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* يتحرك لأعلى 10px */
+  }
+}
+
+
+
+
+form{
+  background:#071727;
+  display:flex;
+  flex-direction:column;    
+  align-items:center;
+  justify-content:start;
+  padding:10px;
+  direction: rtl;
+  height: auto;
+  width: 100%;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 600,
+  'GRAD' 0,
+  'opsz' 24;
+  position: absolute;
+  right: 16px; /* تبعد قليلاً عن الحافة */
+  font-size: 20px;
+}
