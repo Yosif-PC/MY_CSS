@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ثلاث أزرار عصرية</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+  <button class="B_Home"><span class="material-symbols-outlined">add_notes</span>العملاء</button>
+  <row>
+    <label>العميل</label>
+    <input id="C1">
+  </row>
+  <row>
+    <label>العنوان</label>
+    <input id="C2">
+  </row>
+  <row>
+    <label>الهاتف</label>
+    <input type="number" id="C3">
+    <button class="B_Any" style="width: 150px;background-color: rgb(87, 177, 255)" onclick="addToClientsTable()">+</button>
+  </row>
+  <row style="gap: 20px">
+      <button class="B_Any" style="width: 100%;background-color: rgb(35, 143, 65)" onclick="sendClientsData()" >حفظ</button>
+  </row>
+    <table id="ClientsTable">
+    <thead>
+      <tr>
+        <th>العميل</th>
+        <th>العنوان</th>
+        <th>الهاتف</th>
+        <th></th>
+      </tr>
+    </thead>
+    
+    <tbody>
+        {% for item in Clients_Data %}
+        <tr>
+          <td>{{ item[0] }}</td>
+          <td>{{ item[1] }}</td>
+          <td>{{ item[2] }}</td>
+          <td class="deleteBtn" onclick="deleteRow(this)">X</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+
+</body>
+</html>
+
+<script>
+  function addToClientsTable(){
+    
+    let C1 =document.getElementById("C1").value;
+    let C2 =document.getElementById("C2").value;
+    let C3 =Number(document.getElementById("C3").value);
+    if (C1 === "" || C2 === "" || C3 === 0) return;
+    Clients_Data.push([C1,C2,C3])
+
+    let tbody = document.querySelector("#ClientsTable tbody");
+    let row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${C1}</td>
+      <td>${C2}</td>
+      <td>${C3}</td>
+      <td class="deleteBtn" onclick="deleteRow(this)">X</td>
+    `;
+    tbody.appendChild(row);
+  }
+
+   function deleteRow(el) {
+
+    // رسالة التأكيد
+    let result = confirm("هل أنت متأكد؟");
+
+    if(result) {
+        // المستخدم ضغط OK → نفذ الأمر
+        let row = el.parentNode;
+        let index = Array.from(row.parentNode.children).indexOf(row);
+        Clients_Data.splice(index, 1); // حذف الصف من المصفوفة
+        row.remove();
+
+    } 
+    
+  }
+
+  function sendClientsData() {
+
+    fetch("/receive_NewClientsData", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({Clients_Data:Clients_Data}) // إرسال كل الصفوف كاملة
+    })
+    .then(r => r.json())
+    .then(d => alert(d.message))
+    .catch(() => alert("حدث خطأ أثناء الإرسال!"));
+  }
+
+
+</script>

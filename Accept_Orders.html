@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>طب البسطاء</title>
+  <link rel="stylesheet" href="/static/style2.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+  <button class="B_Home">تأكيد الطلبات</button>
+  <form id="orderForm" method="get">
+  {% for i in Order_List %}
+    <button class="B_Home" type="submit" value="{{i}}" style="font-size: 20px;" onclick="setAction(this)">{{i}}</button>
+  {% endfor %}
+  </form>
+
+
+<script>
+function setAction(button) {
+  const form = document.getElementById("orderForm");
+  form.action = "/Accept_Orders/" + button.value;
+}
+</script>
+
+
+
+
+</body>
+</html>

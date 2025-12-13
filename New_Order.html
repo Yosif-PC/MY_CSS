@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>طب البسطاء</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+  <button class="B_Home">طلب جديد</button> 
+  <label>فاتورة رقم : 1</label>
+    <row>
+      <label>العميل</label>
+      <input id="Cl" readonly>
+    </row>
+    <row>
+      <label>الصنف</label>
+      <input id="D1" readonly>
+      
+    </row>
+    <row>
+      <label>الكمية</label>
+      <input type="number" id="D2" >
+      <label>السعر</label>
+      <input type="number" id="D3">
+      <button class="B_Any" style="width: 150px;background-color: rgb(87, 177, 255)" onclick="addToTable()">إضافة</button>
+    </row> 
+    <table id="resultsTable">
+    <thead>
+      <tr>
+        <th>الصنف</th>
+        <th>الكمية</th>
+        <th>السعر</th>
+        <th>الإحمالى</th>
+        <th></th>
+      </tr>
+    </thead>
+    
+    <tbody>
+    </tbody>
+  </table>
+  <row>
+      <label>التوصيل</label>
+      <input type="number" id="D5" oninput="addToTable2()">
+      <label>الخصم</label>
+      <input type="number" id="D6" oninput="addToTable2()">
+    </row>
+
+    <table id="resultsTable2">
+    <thead>
+      <tr>
+        <th>ثمن الأصناف</th>
+        <th>التوصيل</th>
+        <th>الخصم</th>
+        <th>المطلوب</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+    </tbody>
+  </table>
+
+  
+
+  
+    
+
+    <row style="gap: 20px">
+      <button class="B_Any" style="width: 100%;background-color: rgb(35, 143, 65)" onclick="sendData()" >حفظ</button>
+    </row>
+
+
+
+
+
+
+<!-- Popup للـ Clients_List (مرتبط بالـ input id CL) -->
+<div id="popup_CL" class="popup" hidden="true">
+  <div class="popup-content" role="dialog" aria-labelledby="title_CL">
+    <h3 id="title_CL">قائمة العملاء</h3>
+
+    <input type="text" id="search_CL" class="search-box" placeholder="ابحث عن اسم العميل..." oninput="filterList('popup_CL', this.value)">
+
+    <div class="popup-list" id="list_CL">
+      {% for c in Clients %}
+      <button class="item-btn">{{ c }}</button>
+      {% endfor %}
+    </div>
+
+    <div id="no_CL" class="no-results" style="display:none;">لا توجد نتائج</div>
+  </div>
+</div>
+
+<!-- Popup للـ Products_List (مرتبط بالـ input id D1) -->
+<div id="popup_D1" class="popup" hidden="true">
+  <div class="popup-content" role="dialog" aria-labelledby="title_D1">
+    <h3 id="title_D1">قائمة المنتجات</h3>
+
+    <input type="text" id="search_D1" class="search-box" placeholder="ابحث عن المنتج..." oninput="filterList('popup_D1', this.value)">
+
+    <div class="popup-list" id="list_D1">
+      {% for p in Products %}
+      <button class="item-btn">{{ p }}</button>
+      {% endfor %}
+    </div>
+
+    <div id="no_D1" class="no-results" style="display:none;">لا توجد نتائج</div>
+  </div>
+</div>
+
+  
+    
+<script>
+  let Order_Data=[];
+  let summ=0;
+
+  function addToTable(){
+    
+    let D1 =document.getElementById("D1").value;
+    let D2 =Number(document.getElementById("D2").value);
+    let D3 =Number(document.getElementById("D3").value);
+    if (D1 === "" || D2 === 0|| D3 === 0) return;
+    Order_Data.push([D1,D2,D3,D2*D3])
+
+    let tbody = document.querySelector("#resultsTable tbody");
+    let row = document.createElement("tr");
+    summ=Order_Data.reduce((sum, row) => sum + Number(row[3]), 0);
+    row.innerHTML = `
+      <td>${D1}</td>
+      <td>${D2}</td>
+      <td>${D3}</td>
+      <td>${D2*D3}</td>
+      <td class="deleteBtn" onclick="deleteRow(this)">X</td>
+    `;
+    tbody.appendChild(row);
+    addToTable2();
+
+  }
+
+
+
+  function addToTable2(){
+    
+    let D5 =Number(document.getElementById("D5").value);
+    let D6 =Number(document.getElementById("D6").value);
+    let Order_Data2=[document.getElementById("Cl").value,
+    summ,
+    D5,
+    D6,
+    summ+Number(D5)-Number(D6)
+    ]
+
+    let tbody = document.querySelector("#resultsTable2 tbody");
+    tbody.innerHTML = "";
+    let row = document.createElement("tr");
+    
+    row.innerHTML = `
+      <td>${summ}</td>
+      <td>${D5}</td>
+      <td>${D6}</td>
+      <td>${summ+Number(D5)-Number(D6)}</td>
+    `;
+    
+    tbody.appendChild(row);
+    
+
+  }
+
+  function deleteRow(el) {
+
+    // رسالة التأكيد
+    let result = confirm("هل أنت متأكد؟");
+
+    if(result) {
+        // المستخدم ضغط OK → نفذ الأمر
+        let row = el.parentNode;
+        let index = Array.from(row.parentNode.children).indexOf(row);
+        Order_Data.splice(index, 1); // حذف الصف من المصفوفة
+        summ=Order_Data.reduce((sum, row) => sum + Number(row[3]), 0);
+        row.remove();
+        addToTable2();
+
+    } 
+    
+  }
+
+  function sendData() {
+    let TotalOrder=[["1",document.getElementById("Cl").value,"الهاتف","العنوان"]];
+    let Order_Data2=[
+    summ,
+    document.getElementById("D5").value,
+    document.getElementById("D6").value,
+    summ+Number(document.getElementById("D5").value)-Number(document.getElementById("D6").value)
+    ];
+    TotalOrder.push(Order_Data2);   // المصفوفة الكبيرة
+    TotalOrder.push(...Order_Data);  // ملخص الحساب
+    fetch("/receive_NewOrderData", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({TotalOrder:TotalOrder}) // إرسال كل الصفوف كاملة
+    })
+    .then(r => r.json())
+    .then(d => alert(d.message))
+    .catch(() => alert("حدث خطأ أثناء الإرسال!"));
+  }
+
+  /* فتح Popup عند الضغط على المدخل */
+document.getElementById("Cl").addEventListener("click", function(){
+    openPopup("popup_CL", "search_CL");
+});
+document.getElementById("D1").addEventListener("click", function(){
+    openPopup("popup_D1", "search_D1");
+});
+
+function openPopup(popupId, searchInputId) {
+    const p = document.getElementById(popupId);
+    p.style.display = "flex";
+    p.hidden = false;
+
+    const s = document.getElementById(searchInputId);
+    s.value = "";
+
+    p.querySelectorAll(".item-btn").forEach(b => b.style.display = "block");
+    const no = p.querySelector(".no-results");
+    if (no) no.style.display = "none";
+}
+
+/* ربط أزرار القوائم (التعامل مع النقر) */
+function attachButtons() {
+    document.querySelectorAll(".item-btn").forEach(btn => {
+        btn.onclick = null;
+        btn.addEventListener("click", function(){
+            const val = this.innerText.trim();
+            const p = this.closest(".popup");
+            if (!p) return;
+
+            if (p.id === "popup_CL") {
+                document.getElementById("Cl").value = val;
+
+                closePopup("popup_CL");
+            } else if (p.id === "popup_D1") {
+                document.getElementById("D1").value = val;
+                fetch('/process_array', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({Choice_P: val})
+            })
+            .then(res => res.json())
+            .then(data => {
+                let Price_Val = data.result;        // تخزين القيمة
+                console.log(Price_Val);             // التأكد من القيمة
+                document.getElementById("D3").value = Price_Val;  // هنا نملأ المدخل
+            });
+                closePopup("popup_D1");
+            }
+        });
+    });
+}
+attachButtons();
+
+/* إغلاق Popup عند الضغط خارج المحتوى */
+document.querySelectorAll(".popup").forEach(p => {
+    p.addEventListener("click", function(e){
+        if (e.target === p) closePopup(p.id);
+    });
+});
+function closePopup(id) {
+    const p = document.getElementById(id);
+    p.style.display = "none";
+    p.hidden = true;
+}
+
+/* فلترة البحث داخل كل Popup */
+function filterList(popupId, text) {
+    const p = document.getElementById(popupId);
+    if (!p) return;
+    const items = p.querySelectorAll(".item-btn");
+    const noElem = p.querySelector(".no-results");
+
+    const q = text.trim().toLowerCase();
+    let shown = 0;
+
+    items.forEach(btn => {
+        const itemText = btn.innerText.trim().toLowerCase();
+        if (q === "" || itemText.includes(q)) {
+            btn.style.display = "block";
+            shown += 1;
+        } else {
+            btn.style.display = "none";
+        }
+    });
+
+    if (noElem) {
+        noElem.style.display = (shown === 0) ? "block" : "none";
+    }
+}
+
+;
+  
+  
+</script>
+
+</body>
+</html>

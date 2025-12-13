@@ -1,0 +1,61 @@
+<style>
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-family: Arial, sans-serif;
+text-align: center;
+}
+table th, .styled-table td {
+  border: 1px solid #555;
+  padding: 8px;
+  text-align: center;
+}
+table th {
+  background-color: #eee;
+  color: black;
+}
+
+table td {
+  color: rgb(255, 255, 255);
+}
+
+.btn-delete{
+color: red;
+}
+</style>
+
+
+
+<table class="table">
+  <thead>
+    <thead>
+      <tr>
+        {% for he in HeaderData %}
+        <th>{{ he }}</th>
+        {% endfor %}
+        <th></th>
+      </tr>
+    </thead>
+  </thead>
+  {% if BodyData %}
+  <tbody>
+    {% for c in BodyData %}
+    <tr>
+        {% for value in c %}
+            <td>{{ value }}</td>
+        {% endfor %}
+        <td>
+            <form class="no-style" method="post" style="display:inline;">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                <button class="no-style" type="submit" class="btn-delete">✖</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  {% endif %}
+</table>
+
+

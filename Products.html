@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ثلاث أزرار عصرية</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+  <button class="B_Home"><span class="material-symbols-outlined">add_notes</span>الأصناف</button>
+  <row>
+    <label>الصنف</label>
+    <input type="number" name="الصنف">
+  </row>
+  <row>
+      <label>السعر</label>
+      <input type="number" name="سعر الصنف">
+      <button class="B_Any" style="width: 150px;background-color: rgb(87, 177, 255)" name="action" value="add">+</button>
+    </row> 
+    <table class="table">
+      <thead>
+        <thead>
+          <tr>
+            {% for he in HeaderData %}
+            <th>{{ he }}</th>
+            {% endfor %}
+            <th></th>
+          </tr>
+        </thead>
+      </thead>
+      {% if BodyData %}
+      <tbody>
+        {% for c in BodyData %}
+        <tr>
+            {% for value in c %}
+                <td>{{ value }}</td>
+            {% endfor %}
+            <td>
+                <form class="no-style" method="post" style="display:inline;">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="index" value="{{ loop.index0 }}">
+                    <button class="no-style" type="submit" class="btn-delete">✖</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% endif %}
+    </table>
+
+
+</body>
+</html>
