@@ -12,22 +12,46 @@
 </head>
 <body>
   <button class="B_Home">تأكيد الطلبات</button>
-  <form id="orderForm" method="get">
-  {% for i in Order_List %}
-    <button class="B_Home" type="submit" value="{{i}}" style="font-size: 20px;" onclick="setAction(this)">{{i}}</button>
-  {% endfor %}
-  </form>
 
+  <!-- هنا سيتم وضع أزرار الطلبات -->
+  <div id="orderForm" style="width: 100%; justify-items: center;">
+    
+  </div>
 
 <script>
-function setAction(button) {
-  const form = document.getElementById("orderForm");
-  form.action = "/Accept_Orders/" + button.value;
+const scriptURL = "https://script.google.com/macros/s/AKfycbwRMlFgvB7v1kkb5XsIbAtpl00hSrnrt3_0Hj5XXSqZHuG6NYBTFGIfXFC2L2Uubfce/exec";
+
+async function loadOrders() {
+  try {
+    const res = await fetch(`${scriptURL}?sheet=Accept_OrdersSheet`);
+    const data = await res.json();
+
+    const orderForm = document.getElementById("orderForm");
+    orderForm.innerHTML = "";
+
+    for (let i = 1; i < data.length; i++) {
+      const invoiceNumber = data[i][0];
+      const clientName = data[i][2];
+
+      const btn = document.createElement("button");
+      btn.className = "B_Home";
+      btn.style.fontSize = "20px";
+      btn.textContent = `${invoiceNumber} - ${clientName}`;
+
+      btn.addEventListener("click", () => {
+        window.location.href = `/Accept_Orders/${invoiceNumber}`;
+      });
+
+      orderForm.appendChild(btn);
+    }
+  } catch (err) {
+    console.error("حدث خطأ عند تحميل الطلبات:", err);
+    alert("فشل تحميل الطلبات");
+  }
 }
+
+loadOrders();
 </script>
-
-
-
-
 </body>
+
 </html>
