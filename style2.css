@@ -1,0 +1,220 @@
+
+html,body{
+  height:100%;
+  margin:0;
+  
+}
+
+.no-style {
+  all: unset;  /* removes all inherited and applied styles */
+  /* or use all: revert; to go back to browser defaults */
+}
+
+bodyPrint,body{
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:#ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:center;
+  direction: rtl;
+  height: auto;
+  padding: 20px;
+}
+
+
+
+bodyPrint{
+  width: 100%;
+}
+
+
+.B_Home_Logo{
+  background-image: url(../static/Home_Logo.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center; /* لتوسيط النص */
+  margin: 10px;
+  z-index: 1;
+
+  
+
+  box-shadow:
+    0 10px 10px rgba(0, 0, 0, 0.4), /* ظل ناعم */
+    0 0 0 5px #ffffff; /* هذا هو الفريم الأبيض حول الزر */
+  color: rgb(2, 79, 129);
+
+}
+
+
+
+
+.B_Home{
+  background-color: aliceblue;
+  width: 80%;
+  height: 50px;
+  border-radius: 30px;
+  font-size: 25px;
+  margin: 15px;
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* لتوسيط النص */
+  position: relative;
+  animation: upDown 2s ease-in-out infinite;
+  
+
+  box-shadow:
+    0 10px 10px rgba(0, 0, 0, 0.4), /* ظل ناعم */
+    0 0 0 5px #ffffff; /* هذا هو الفريم الأبيض حول الزر */
+  color: rgb(2, 79, 129);
+
+}
+
+
+.B_Any{
+  height: 40px;
+  border-radius: 20px;
+  font-size: 19px;
+  margin: 10px;
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* لتوسيط النص */
+  
+  box-shadow:
+    0 10px 10px rgba(0, 0, 0, 0.4), /* ظل ناعم */
+    0 0 0 2px #ffffff; /* هذا هو الفريم الأبيض حول الزر */
+  color: rgb(255, 255, 255);
+
+}
+
+
+
+
+
+
+@keyframes upDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* يتحرك لأعلى 10px */
+  }
+}
+
+
+
+
+form{
+  background:#f8f8f8;
+  display:flex;
+  flex-direction:column;    
+  align-items:center;
+  justify-content:start;
+  padding:10px;
+  direction: rtl;
+  height: auto;
+  width: 100%;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 600,
+  'GRAD' 0,
+  'opsz' 24;
+  position: absolute;
+  right: 16px; /* تبعد قليلاً عن الحافة */
+  font-size: 20px;
+}
+
+
+
+.loader {
+  border: 8px solid #107902; /* خلفية الشريط */
+  border-top: 8px solid #bd021b; /* لون الحركة */
+  border-radius: 50%;
+  width: 220px;
+  height: 220px;
+  animation: spin 1s linear infinite;
+  z-index: 1;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+row{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  
+}
+
+
+
+input{
+  width:100%;
+  height: 20px ;
+  border-radius: 15px;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: "Cairo", sans-serif;
+  text-align: center;
+  margin: 2px;
+
+}
+
+
+label{
+  width:fit-content;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "Cairo", sans-serif;
+  margin: 5px;
+  color: #ffffff;
+  white-space: nowrap;
+
+}
+
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-family: Arial, sans-serif;
+text-align: center;
+}
+table th, .styled-table td {
+  border: 1px solid #000000;
+  padding: 1px;
+  text-align: center;
+}
+table th {
+  background-color: #d7d5da;
+  color: black;
+}
+
+table td {
+  color: rgb(0, 0, 0);
+  border: 1px solid #000000;
+  padding: 6px;
+}
+
+.btn-delete{
+color: red;
+}
+
+.deleteBtn {
+   color: red; cursor: pointer; font-weight: bold; }
