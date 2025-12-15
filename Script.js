@@ -1,8 +1,8 @@
 let Order_Data = [];
 let summ = 0;
 
-// العملاء
-let clientsData = [];
+// العملاء مع الهاتف والعنوان
+let clientsData = []; // شكل: [{name:"أحمد", phone:"010", address:"القاهرة"}, ...]
 
 // المنتجات والأسعار
 let productsList = [];
@@ -10,14 +10,27 @@ let productsPrices = [];
 
 const scriptURL = "https://script.google.com/macros/s/AKfycbwRMlFgvB7v1kkb5XsIbAtpl00hSrnrt3_0Hj5XXSqZHuG6NYBTFGIfXFC2L2Uubfce/exec";
 
-// === تحميل العملاء من Google Sheet ===
+// === تحميل العملاء بالكامل مع الهاتف والعنوان ===
 async function loadClients() {
     try {
-        const res = await fetch(`${scriptURL}?sheet=ClientsSheet&column=العميل`);
-        clientsData = await res.json();
+        const resNames = await fetch(`${scriptURL}?sheet=ClientsSheet&column=العميل`);
+        const resPhones = await fetch(`${scriptURL}?sheet=ClientsSheet&column=الهاتف`);
+        const resAddresses = await fetch(`${scriptURL}?sheet=ClientsSheet&column=العنوان`);
+
+        const names = await resNames.json();
+        const phones = await resPhones.json();
+        const addresses = await resAddresses.json();
+
+        clientsData = names.map((name, i) => ({
+            name: name,
+            phone: phones[i] || "",
+            address: addresses[i] || ""
+        }));
+
         const listCL = document.getElementById("list_CL");
-        listCL.innerHTML = clientsData.map(c => `<button class="item-btn">${c}</button>`).join('');
+        listCL.innerHTML = clientsData.map(c => `<button class="item-btn">${c.name}</button>`).join('');
         attachButtons(listCL, 'CL');
+
     } catch (e) {
         console.error("خطأ في تحميل العملاء:", e);
     }
@@ -55,14 +68,8 @@ function selectClient(val) {
 // === اختيار المنتج مع إيجاد السعر ===
 function selectProduct(val) {
     document.getElementById("D1").value = val;
-
     const index = productsList.indexOf(val);
-    if (index >= 0) {
-        document.getElementById("D3").value = productsPrices[index] || 0;
-    } else {
-        document.getElementById("D3").value = 0;
-    }
-
+    document.getElementById("D3").value = (index >= 0) ? productsPrices[index] || 0 : 0;
     closePopup("popup_D1");
 }
 
@@ -163,16 +170,17 @@ function updateSummary() {
 document.getElementById("D5").addEventListener("input", updateSummary);
 document.getElementById("D6").addEventListener("input", updateSummary);
 
-// === حفظ الطلب ===
+// === حفظ الطلب مع الهاتف والعنوان مخفي ===
 function sendData() {
     const overlay = document.getElementById("loadingOverlay");
-    overlay.style.display = "flex"; // عرض التحميل
+    overlay.style.display = "flex";
 
-    const Cl = document.getElementById("Cl").value;
-    if (!Cl || Order_Data.length === 0) { 
+    const ClName = document.getElementById("Cl").value;
+    const client = clientsData.find(c => c.name === ClName);
+    if (!client || Order_Data.length === 0) {
         overlay.style.display = "none";
-        alert("اختر العميل وأضف أصناف"); 
-        return; 
+        alert("اختر العميل وأضف أصناف");
+        return;
     }
 
     const D5 = Number(document.getElementById("D5").value || 0);
@@ -181,8 +189,6 @@ function sendData() {
 
     const today = new Date();
     const invoiceNumber = 1;
-    const phone = "";
-    const address = "";
 
     const orderArray = Order_Data.map(r => ({
         الصنف: r[0],
@@ -195,9 +201,9 @@ function sendData() {
         sheet: "Accept_OrdersSheet",
         "رقم الفاتورة": invoiceNumber,
         "التاريخ": today.toLocaleDateString(),
-        "العميل": Cl,
-        "الهاتف": phone,
-        "العنوان": address,
+        "العميل": client.name,
+        "الهاتف": client.phone,
+        "العنوان": client.address,
         "ثمن الأصناف": summ,
         "التوصيل": D5,
         "الخصم": D6,
@@ -211,9 +217,8 @@ function sendData() {
     })
     .then(res => res.json())
     .then(d => {
-        overlay.style.display = "none"; // إخفاء التحميل
-        console.log("Response:", d);
-        if(d.result === "success") {
+        overlay.style.display = "none";
+        if (d.result === "success") {
             alert("تم الحفظ بنجاح");
             Order_Data = [];
             updateTable();
@@ -222,14 +227,11 @@ function sendData() {
         }
     })
     .catch(err => {
-        overlay.style.display = "none"; // إخفاء التحميل حتى لو حدث خطأ
+        overlay.style.display = "none";
         console.error(err);
         alert("حدث خطأ أثناء الإرسال!");
     });
 }
-
-
-
 
 // === تهيئة الصفحة ===
 loadClients();
