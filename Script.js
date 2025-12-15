@@ -165,26 +165,71 @@ document.getElementById("D6").addEventListener("input", updateSummary);
 
 // === حفظ الطلب ===
 function sendData() {
+    const overlay = document.getElementById("loadingOverlay");
+    overlay.style.display = "flex"; // عرض التحميل
+
     const Cl = document.getElementById("Cl").value;
-    if (!Cl || Order_Data.length === 0) { alert("اختر العميل وأضف أصناف"); return; }
+    if (!Cl || Order_Data.length === 0) { 
+        overlay.style.display = "none";
+        alert("اختر العميل وأضف أصناف"); 
+        return; 
+    }
+
     const D5 = Number(document.getElementById("D5").value || 0);
     const D6 = Number(document.getElementById("D6").value || 0);
-    const TotalOrder = [];
-    Order_Data.forEach(r => {
-        TotalOrder.push([1, Cl, ...r, D5, D6, summ + D5 - D6]);
-    });
+    const totalRequired = summ + D5 - D6;
+
+    const today = new Date();
+    const invoiceNumber = 1;
+    const phone = "";
+    const address = "";
+
+    const orderArray = Order_Data.map(r => ({
+        الصنف: r[0],
+        الكمية: r[1],
+        السعر: r[2],
+        الاحمالي: r[3]
+    }));
+
+    const postData = {
+        sheet: "Accept_OrdersSheet",
+        "رقم الفاتورة": invoiceNumber,
+        "التاريخ": today.toLocaleDateString(),
+        "العميل": Cl,
+        "الهاتف": phone,
+        "العنوان": address,
+        "ثمن الأصناف": summ,
+        "التوصيل": D5,
+        "الخصم": D6,
+        "المطلوب": totalRequired,
+        "مصفوفة الطلب": JSON.stringify(orderArray)
+    };
 
     fetch(scriptURL, {
         method: 'POST',
-        body: JSON.stringify(TotalOrder)
-    }).then(res => res.json())
-        .then(d => {
-            if (d.result === "success") alert("تم الحفظ");
+        body: new URLSearchParams(postData)
+    })
+    .then(res => res.json())
+    .then(d => {
+        overlay.style.display = "none"; // إخفاء التحميل
+        console.log("Response:", d);
+        if(d.result === "success") {
+            alert("تم الحفظ بنجاح");
             Order_Data = [];
             updateTable();
-        })
-        .catch(() => alert("حدث خطأ أثناء الإرسال!"));
+        } else {
+            alert("فشل الحفظ: " + d.message);
+        }
+    })
+    .catch(err => {
+        overlay.style.display = "none"; // إخفاء التحميل حتى لو حدث خطأ
+        console.error(err);
+        alert("حدث خطأ أثناء الإرسال!");
+    });
 }
+
+
+
 
 // === تهيئة الصفحة ===
 loadClients();
