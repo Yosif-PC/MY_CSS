@@ -5,53 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>طب البسطاء</title>
   <link rel="stylesheet" href="https://yosif-pc.github.io/MY_CSS/style2.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
+
 <body>
-  <button class="B_Home">تأكيد الطلبات</button>
 
-  <!-- هنا سيتم وضع أزرار الطلبات -->
-  <div id="orderForm" style="width: 100%; justify-items: center;">
-    
+<button class="B_Home">تأكيد الطلبات</button>
+<!-- Popup للـ Invoice_List -->
+<div id="popup_invoices" class="popup" hidden="true">
+  <div class="popup-content" role="dialog" aria-labelledby="title_invoices">
+    <h3 id="title_invoices">قائمة الفواتير</h3>
+
+    <input type="text" id="search_invoices" class="search-box" placeholder="ابحث عن رقم الفاتورة أو اسم العميل..." oninput="filterInvoiceList(this.value)">
+
+    <div class="popup-list" id="list_invoices">
+      <!-- سيتم ملؤه تلقائيًا بواسطة JS -->
+    </div>
+
+    <div id="no_invoices" class="no-results" style="display:none;">لا توجد نتائج</div>
   </div>
+</div>
 
-<script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbwRMlFgvB7v1kkb5XsIbAtpl00hSrnrt3_0Hj5XXSqZHuG6NYBTFGIfXFC2L2Uubfce/exec";
 
-async function loadOrders() {
-  try {
-    const res = await fetch(`${scriptURL}?sheet=Accept_OrdersSheet`);
-    const data = await res.json();
+<bodyPrint id="Print_Area">
 
-    const orderForm = document.getElementById("orderForm");
-    orderForm.innerHTML = "";
+<label style="color:black;">فاتورة طلبات عميل طب البسطاء</label>
 
-    for (let i = 1; i < data.length; i++) {
-      const invoiceNumber = data[i][0];
-      const clientName = data[i][2];
+<!-- بيانات الفاتورة -->
+<table>
+  <thead>
+    <tr>
+      <th>رقم الفاتورة</th>
+      <th>اسم العميل</th>
+    </tr>
+  </thead>
+  <tbody id="invoiceInfo"></tbody>
 
-      const btn = document.createElement("button");
-      btn.className = "B_Home";
-      btn.style.fontSize = "20px";
-      btn.textContent = `${invoiceNumber} - ${clientName}`;
+  <thead>
+    <tr>
+      <th>رقم الهاتف</th>
+      <th>عنوان التوصيل</th>
+    </tr>
+  </thead>
+  <tbody id="clientInfo"></tbody>
+</table>
 
-      btn.addEventListener("click", () => {
-        window.location.href = `/Accept_Orders/${invoiceNumber}`;
-      });
+<br>
 
-      orderForm.appendChild(btn);
-    }
-  } catch (err) {
-    console.error("حدث خطأ عند تحميل الطلبات:", err);
-    alert("فشل تحميل الطلبات");
-  }
-}
+<!-- الأصناف -->
+<table>
+  <thead>
+    <tr>
+      <th>الصنف</th>
+      <th>الكمية</th>
+      <th>السعر</th>
+      <th>الإجمالي</th>
+    </tr>
+  </thead>
+  <tbody id="itemsTable"></tbody>
+</table>
 
-loadOrders();
-</script>
+<br>
+
+<!-- الملخص -->
+<table>
+  <thead>
+    <tr>
+      <th>ثمن الأصناف</th>
+      <th>التوصيل</th>
+      <th>الخصم</th>
+      <th>المطلوب</th>
+    </tr>
+  </thead>
+  <tbody id="summaryTable"></tbody>
+</table>
+
+</bodyPrint>
+
+<script src="ScriptAccept_Orders.js"></script>
 </body>
-
 </html>
