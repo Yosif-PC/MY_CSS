@@ -4,131 +4,83 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>طب البسطاء</title>
-  <link rel="stylesheet" href="https://yosif-pc.github.io/MY_CSS/style2.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-
+  <link rel="stylesheet" href="/static/style2.css" />
 </head>
+
 <body>
-  <button class="B_Home">تأكيد الطلبات</button> 
-  <bodyPrint id="Print_Area">
-      <label style="color: black;">فاتورة طلبات عميل طب البسطاء</label>
-    <table>
-      <thead>
-        <tr>
-          <th>رقم الفاتورة</th>
-          <th>اسم العميل</th>
-        </tr>
-      </thead>
-      
-      <tbody>
-        {% for item in TotalOrder[0:1] %}
-        <tr>
-          <td>{{ item[0] }}</td>
-          <td>{{ item[1] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-      <thead>
-        <tr>
-          <th>رقم الهاتف</th>
-          <th>عنوان التوصيل</th>
-        </tr>
-      </thead>
-      
-      <tbody>
-        {% for item in TotalOrder[0:1] %}
-        <tr>
-          <td>{{ item[2] }}</td>
-          <td>{{ item[3] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    
-    <br>
-    <table>
-      <thead>
-        <tr>
-          <th>الصنف</th>
-          <th>الكمية</th>
-          <th>السعر</th>
-          <th>الإحمالى</th>
-        </tr>
-      </thead>
-      
-      
-      <tbody>
-        {% for item in TotalOrder[2:] %}
-        <tr>
-          <td>{{ item[0] }}</td>
-          <td>{{ item[1] }}</td>
-          <td>{{ item[2] }}</td>
-          <td>{{ item[3] }} </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
 
-    <br>
-    <table>
-      <thead>
-        <tr>
-          <th>ثمن الأصناف</th>
-          <th>التوصيل</th>
-          <th>الخصم</th>
-          <th>المطلوب</th>
-        </tr>
-      </thead>
-      
-      <tbody>
-        {% for item in TotalOrder[1:2] %}
-        <tr>
-          <td>{{ item[0] }}</td>
-          <td>{{ item[1] }}</td>
-          <td>{{ item[2] }}</td>
-          <td>{{ item[3] }} جنيه</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </bodyPrint>
+<button class="B_Home">تأكيد الطلبات</button>
+<!-- Popup للـ Invoice_List -->
+<div id="popup_invoices" class="popup" hidden="true">
+  <div class="popup-content" role="dialog" aria-labelledby="title_invoices">
+    <h3 id="title_invoices">قائمة الفواتير</h3>
 
-  
+    <input type="text" id="search_invoices" class="search-box" placeholder="ابحث عن رقم الفاتورة أو اسم العميل..." oninput="filterInvoiceList(this.value)">
 
-  
-    
+    <div class="popup-list" id="list_invoices">
+      <!-- سيتم ملؤه تلقائيًا بواسطة JS -->
+    </div>
 
-    <row>
-      <button class="B_Any" style="width: 100%;  height:60px" onclick="sendData()" >✔️</button>
-      <button class="B_Any" style="width: 100%; height:60px" onclick="sendData()" >❌</button>
-      <button class="B_Any" style="width: 100%; height:60px" onclick="window.open('https://wa.me/+2{{TotalOrder[0][2]}}', '_blank')" >💬</button>
-      <button class="B_Any" style="width: 100%; color: rgb(25, 116, 235); height:60px" onclick="sendData()" >❯❯</button>
-      <button class="B_Any" style="width: 100%;  height:60px" id="window.print">💾</button>
+    <div id="no_invoices" class="no-results" style="display:none;">لا توجد نتائج</div>
+  </div>
+</div>
 
 
-    </row>
-  
-  
+<bodyPrint id="Print_Area">
 
+<label style="color:black;">فاتورة طلبات عميل طب البسطاء</label>
+
+<!-- بيانات الفاتورة -->
+<table>
+  <thead>
+    <tr>
+      <th>رقم الفاتورة</th>
+      <th>اسم العميل</th>
+    </tr>
+  </thead>
+  <tbody id="invoiceInfo"></tbody>
+
+  <thead>
+    <tr>
+      <th>رقم الهاتف</th>
+      <th>عنوان التوصيل</th>
+    </tr>
+  </thead>
+  <tbody id="clientInfo"></tbody>
+</table>
+
+<br>
+
+<!-- الأصناف -->
+<table>
+  <thead>
+    <tr>
+      <th>الصنف</th>
+      <th>الكمية</th>
+      <th>السعر</th>
+      <th>الإجمالي</th>
+    </tr>
+  </thead>
+  <tbody id="itemsTable"></tbody>
+</table>
+
+<br>
+
+<!-- الملخص -->
+<table>
+  <thead>
+    <tr>
+      <th>ثمن الأصناف</th>
+      <th>التوصيل</th>
+      <th>الخصم</th>
+      <th>المطلوب</th>
+    </tr>
+  </thead>
+  <tbody id="summaryTable"></tbody>
+</table>
+
+</bodyPrint>
+
+<script src="ScriptAccept_Orders.js"></script>
 </body>
 </html>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<script>
-document.getElementById("window.print").addEventListener("click", () => {
-  // اختر العنصر الذي تريد حفظه
-  const element = document.getElementById("Print_Area"); 
-
-  html2canvas(element).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "section.png";       // اسم الصورة
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
-});
-</script>
-

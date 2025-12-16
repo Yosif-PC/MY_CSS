@@ -12,7 +12,7 @@ html,body{
 
 bodyPrint,body{
   font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background:#011e3b;
+  background:#ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,8 +30,7 @@ bodyPrint{
 
 
 .B_Home_Logo{
-  background-image: url("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Home_Logo.png");
-
+  background-image: url(../static/Home_Logo.png);
   background-repeat: no-repeat;
   background-size: cover;
   width: 200px;
@@ -114,7 +113,7 @@ bodyPrint{
 
 
 form{
-  background:#011e3b;
+  background:#f8f8f8;
   display:flex;
   flex-direction:column;    
   align-items:center;
@@ -198,18 +197,18 @@ font-family: Arial, sans-serif;
 text-align: center;
 }
 table th, .styled-table td {
-  border: 1px solid #555;
+  border: 1px solid #000000;
   padding: 1px;
   text-align: center;
 }
 table th {
-  background-color: #ffffff;
+  background-color: #d7d5da;
   color: black;
 }
 
 table td {
-  color: rgb(255, 255, 255);
-  border: 1px solid #ccc;
+  color: rgb(0, 0, 0);
+  border: 1px solid #000000;
   padding: 6px;
 }
 
@@ -221,9 +220,7 @@ color: red;
    color: red; cursor: pointer; font-weight: bold; }
 
 
-
-/* النافذة المنبثقة */
-    .popup {
+.popup {
     display: none;
     position: fixed;
     top: 0; left: 0;
