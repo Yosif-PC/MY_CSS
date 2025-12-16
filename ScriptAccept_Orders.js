@@ -111,3 +111,16 @@ function closePopup() {
 
 // تحميل الفواتير عند فتح الصفحة
 window.addEventListener("load", loadInvoices);
+
+
+document.getElementById("window.print").addEventListener("click", () => {
+  // اختر العنصر الذي تريد حفظه
+  const element = document.getElementById("Print_Area"); 
+
+  html2canvas(element).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "section.png";       // اسم الصورة
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+});
