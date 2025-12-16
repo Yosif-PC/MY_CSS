@@ -1,6 +1,6 @@
 let Order_Data = [];
 let summ = 0;
-
+const overlay = document.getElementById("loadingOverlay");
 // العملاء مع الهاتف والعنوان
 let clientsData = []; // شكل: [{name:"أحمد", phone:"010", address:"القاهرة"}, ...]
 
@@ -13,6 +13,8 @@ const scriptURL = "https://script.google.com/macros/s/AKfycbwRMlFgvB7v1kkb5XsIbA
 // === تحميل العملاء بالكامل مع الهاتف والعنوان ===
 async function loadClients() {
     try {
+        overlay.style.display = "flex";
+    
         const resNames = await fetch(`${scriptURL}?sheet=ClientsSheet&column=العميل`);
         const resPhones = await fetch(`${scriptURL}?sheet=ClientsSheet&column=الهاتف`);
         const resAddresses = await fetch(`${scriptURL}?sheet=ClientsSheet&column=العنوان`);
@@ -30,6 +32,7 @@ async function loadClients() {
         const listCL = document.getElementById("list_CL");
         listCL.innerHTML = clientsData.map(c => `<button class="item-btn">${c.name}</button>`).join('');
         attachButtons(listCL, 'CL');
+        overlay.style.display = "none";
 
     } catch (e) {
         console.error("خطأ في تحميل العملاء:", e);
@@ -172,7 +175,7 @@ document.getElementById("D6").addEventListener("input", updateSummary);
 
 // === حفظ الطلب مع الهاتف والعنوان مخفي ===
 function sendData() {
-    const overlay = document.getElementById("loadingOverlay");
+    
     overlay.style.display = "flex";
 
     const ClName = document.getElementById("Cl").value;
@@ -234,6 +237,7 @@ function sendData() {
 }
 
 // === تهيئة الصفحة ===
-loadClients();
+
 loadProductNames();
 loadProductPrices();
+loadClients();
