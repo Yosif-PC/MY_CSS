@@ -10,9 +10,9 @@ const cssContent = localStorage.getItem("style.css");
         // إزالة أي CSS سابق لتجنب التكرار
         const oldStyle = document.getElementById("style.css");
         if (oldStyle) oldStyle.remove();
-
-        const style = document.createElement("style.css");
-        style.id = "style.css";
+            
+        const style = document.createElement("style");
+        style.id = "myStyle";
         style.textContent = cssContent;
         document.head.appendChild(style);
 
