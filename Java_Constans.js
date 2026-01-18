@@ -38,6 +38,7 @@ fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/"+Data_Name)
 Save_image_From_URL("Home_Logo.png");
 
 Save_content_From_URL("style.css");
+Save_content_From_URL("Home_Js.js");
 
 
 
