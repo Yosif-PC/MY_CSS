@@ -1,7 +1,7 @@
-function Save_image_From_URL(Image_URL, Image_Name) {
+function Save_image_From_URL(Image_Name) {
     if (localStorage.getItem(Image_Name)) return;
     
-fetch(Image_URL)
+fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/"+Image_Name)
     .then(res => res.blob())
     .then(blob => {
         const reader = new FileReader();
@@ -18,23 +18,27 @@ fetch(Image_URL)
 }
 
 
-function Save_content_From_URL(Data_URL, Data_Name){
+
+
+
+function Save_content_From_URL(Data_Name){
     if (localStorage.getItem(Data_Name)) return;
 
-fetch(Data_URL)
+fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/"+Data_Name)
     .then(res => res.text())
     .then(Content => {
         localStorage.setItem(Data_Name, Content); // حفظ فقط
-        console.log("تم حفظ ملف  بنجاح ✅");
+        console.log("تم حفظ ملف " + Data_Name + " بنجاح ✅");
     })
     .catch(err => {
         console.error("فشل تحميل ملف ❌", err);
     });
 }
 
+Save_image_From_URL("Home_Logo.png");
+
+Save_content_From_URL("style.css");
 
 
-Save_content_From_URL("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Home_Logo.png","Home_CSS");
 
-Save_image_From_URL("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Home_Logo.png","My_Logo");
 
