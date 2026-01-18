@@ -8,10 +8,10 @@ const savedImage = localStorage.getItem("Home_Logo.png");
 const cssContent = localStorage.getItem("style.css");
     if (cssContent) {
         // إزالة أي CSS سابق لتجنب التكرار
-        const oldStyle = document.getElementById("Home_CSS");
+        const oldStyle = document.getElementById("style.css");
         if (oldStyle) oldStyle.remove();
 
-        const style = document.createElement("style");
+        const style = document.createElement("style.css");
         style.id = "myStyle";
         style.textContent = cssContent;
         document.head.appendChild(style);
