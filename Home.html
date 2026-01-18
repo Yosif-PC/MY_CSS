@@ -37,14 +37,31 @@
     <button class="B_Home"><span class="material-symbols-outlined">calendar_meal</span> الأصناف</button>
   </form>
 <script>
-const savedJS = localStorage.getItem("Home_Js");
-        if (savedJS) {
-            const script = document.createElement("script");
-            script.id = "myScript";
-            script.textContent = savedJS;
-            document.body.appendChild(script);
-            console.log("JS تم تشغيله تلقائيًا!");
+
+async function SaveAndRunJS() {
+    // تحميل وحفظ
+    if (!localStorage.getItem("Java_Constans.js")) {
+        try {
+            const res = await fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Java_Constans.js");
+            const content = await res.text();
+            localStorage.setItem("Java_Constans.js", content);
+            setTimeout(() => console.log("تم حفظ ملف Java_Constans.js بنجاح ✅"), 4000);
+        } catch (e) {
+            console.error("فشل تحميل ملف ❌", e);
         }
+    }
+
+    // تشغيل JS بعد الحفظ
+    const savedJS1 = localStorage.getItem("Java_Constans.js") || "";
+    const savedJS2 = localStorage.getItem("Home_Js.js") || "";
+    const script = document.createElement("script");
+    script.id = "myScript";
+    script.textContent = savedJS1 + "\n" + savedJS2;
+    document.body.appendChild(script);
+    console.log("JS تم تشغيله تلقائيًا!");
+}
+
+SaveAndRunJS();
 
 </script>
 </body>
