@@ -12,7 +12,7 @@ const cssContent = localStorage.getItem("style.css");
         if (oldStyle) oldStyle.remove();
 
         const style = document.createElement("style.css");
-        style.id = "myStyle";
+        style.id = "style.css";
         style.textContent = cssContent;
         document.head.appendChild(style);
 
