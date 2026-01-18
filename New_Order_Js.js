@@ -1,7 +1,7 @@
-const cssContent = localStorage.getItem("style2.css");
+const cssContent = localStorage.getItem("style.css");
     if (cssContent) {
         // إزالة أي CSS سابق لتجنب التكرار
-        const oldStyle = document.getElementById("style2.css");
+        const oldStyle = document.getElementById("style.css");
         if (oldStyle) oldStyle.remove();
             
         const style = document.createElement("style");
