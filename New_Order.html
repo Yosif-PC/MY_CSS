@@ -144,9 +144,11 @@ async function SaveAndRunJS() {
     const savedJS3 = localStorage.getItem("Java_Constans.js") || "";
     const savedJS4 = localStorage.getItem("New_Order_Js.js") || "";
     const script = document.createElement("script");
-    script.id = "myScript";
+    script.id = "myScript2";
     script.textContent = savedJS3 + "\n" + savedJS4;
+    console.log(script);
     document.body.appendChild(script);
+    
     console.log("JS تم تشغيله تلقائيًا!");
 }
 
