@@ -141,11 +141,11 @@ async function SaveAndRunJS() {
     }
 
     // تشغيل JS بعد الحفظ
-    const savedJS1 = localStorage.getItem("Java_Constans.js") || "";
-    const savedJS2 = localStorage.getItem("New_Order_Js.js") || "";
+    const savedJS3 = localStorage.getItem("Java_Constans.js") || "";
+    const savedJS4 = localStorage.getItem("New_Order_Js.js") || "";
     const script = document.createElement("script");
     script.id = "myScript";
-    script.textContent = savedJS1 + "\n" + savedJS2;
+    script.textContent = savedJS3 + "\n" + savedJS4;
     document.body.appendChild(script);
     console.log("JS تم تشغيله تلقائيًا!");
 }
