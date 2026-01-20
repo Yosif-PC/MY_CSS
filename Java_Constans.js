@@ -46,6 +46,6 @@ if (!localStorage.getItem("Clients_LD")){
 localStorage.setItem("Clients_LD", "[]")
 }
 
-if (!localStorage.getItem("products_LD")){
-localStorage.setItem("products_LD", "[]")
+if (!localStorage.getItem("Products_LD")){
+localStorage.setItem("Products_LD", "[]")
 }
