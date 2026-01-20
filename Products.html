@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ثلاث أزرار عصرية</title>
-  <link rel="stylesheet" href="https://yosif-pc.github.io/MY_CSS/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
@@ -14,44 +13,56 @@
   <button class="B_Home"><span class="material-symbols-outlined">add_notes</span>الأصناف</button>
   <row>
     <label>الصنف</label>
-    <input type="number" name="الصنف">
+    <input id="P1" name="الصنف">
   </row>
   <row>
       <label>السعر</label>
-      <input type="number" name="سعر الصنف">
-      <button class="B_Any" style="width: 150px;background-color: rgb(87, 177, 255)" name="action" value="add">+</button>
-    </row> 
-    <table class="table">
-      <thead>
-        <thead>
-          <tr>
-            {% for he in HeaderData %}
-            <th>{{ he }}</th>
-            {% endfor %}
-            <th></th>
-          </tr>
-        </thead>
-      </thead>
-      {% if BodyData %}
-      <tbody>
-        {% for c in BodyData %}
-        <tr>
-            {% for value in c %}
-                <td>{{ value }}</td>
-            {% endfor %}
-            <td>
-                <form class="no-style" method="post" style="display:inline;">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="index" value="{{ loop.index0 }}">
-                    <button class="no-style" type="submit" class="btn-delete">✖</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-      {% endif %}
-    </table>
+      <input id="P2" type="number" name="سعر الصنف">
+      <button class="B_Any" style="width: 150px;background-color: rgb(87, 177, 255)" onclick="addToProductsTable()">+</button>
+    </row>
+    <row style="gap: 20px">
+      <button class="B_Any" style="width: 100%;background-color: rgb(35, 143, 65)" onclick="sendProductsData()" >حفظ</button>
+  </row> 
+    <table id="ProductsTable">
+    <thead>
+      <tr>
+        <th>الصنف</th>
+        <th>السعر</th>
+        <th></th>
+      </tr>
+      <tbody></tbody>
+    </thead>
+    
+  </table>
 
 
 </body>
+
+
 </html>
+<script>
+async function SaveAndRunJS() {
+    // تحميل وحفظ
+    if (!localStorage.getItem("Java_Constans.js")) {
+        try {
+            const res = await fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Java_Constans.js");
+            const content = await res.text();
+            localStorage.setItem("Java_Constans.js", content);
+            setTimeout(() => console.log("تم حفظ ملف Java_Constans.js بنجاح ✅"), 4000);
+        } catch (e) {
+            console.error("فشل تحميل ملف ❌", e);
+        }
+    }
+
+    // تشغيل JS بعد الحفظ
+    const savedJS1 = localStorage.getItem("Java_Constans.js") || "";
+    const savedJS2 = localStorage.getItem("Products_js.js") || "";
+    const script = document.createElement("script");
+    script.id = "myScript";
+    script.textContent = savedJS1 + "\n" + savedJS2;
+    document.body.appendChild(script);
+    console.log("JS تم تشغيله تلقائيًا!");
+}
+
+SaveAndRunJS();
+</script>
