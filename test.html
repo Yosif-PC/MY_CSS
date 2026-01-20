@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>IndexedDB Flexible ObjectStore</title>
+</head>
+<body>
+  <script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw8Ts5YneYKlmBKg8HC4d0F3mMBpZ8WZfjsM2TJz-jJ6eX6Kj_u_1OgtkvhahAgpCEoyw/exec-jJ6eX6Kj_u_1OgtkvhahAgpCEoyw";
+
+// حفظ قيمة
+fetch(WEB_APP_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ action: "set", row: 2, col: 3, value: "Ali" })
+})
+.then(res => res.text())
+.then(data => console.log("تم الحفظ ✅", data));
+
+// قراءة قيمة
+fetch(WEB_APP_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ action: "get", row: 2, col: 3 })
+})
+.then(res => res.text())
+.then(data => console.log("قيمة الخلية:", data.value));
+</script>
+</body>
+</html>
