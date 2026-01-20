@@ -80,5 +80,4 @@ renderTable();
   function sendProductsData() {
     localStorage.setItem("Products_LD", JSON.stringify(ProductsList));
     alert("تم الحفظ بنجاح");
-
   }
