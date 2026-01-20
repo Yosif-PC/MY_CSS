@@ -1,197 +1,157 @@
-const cssContent = localStorage.getItem("style.css");
-    if (cssContent) {
-        // إزالة أي CSS سابق لتجنب التكرار
-        const oldStyle = document.getElementById("style.css");
-        if (oldStyle) oldStyle.remove();
-            
-        const style = document.createElement("style");
-        style.id = "myStyle";
-        style.textContent = cssContent;
-        document.head.appendChild(style);
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>طب البسطاء</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+  <button class="B_Home">طلب جديد</button> 
+  <label>فاتورة رقم : 1</label>
+    <row>
+      <label>العميل</label>
+      <input id="Cl" readonly>
+      <input type="hidden" id="Cl_Phone" readonly>
+      <input type="hidden" id="Cl_Address" readonly>
+    </row>
+    <row>
+      <label>الصنف</label>
+      <input id="D1" readonly>
+      
+    </row>
+    <row>
+      <label>الكمية</label>
+      <input type="number" id="D2" >
+      <label>السعر</label>
+      <input type="number" id="D3">
+      <button class="B_Any" style="width: 150px;background-color: rgb(87, 177, 255)" onclick="addToTable()">إضافة</button>
+    </row> 
+    <table id="resultsTable">
+    <thead>
+      <tr>
+        <th>الصنف</th>
+        <th>الكمية</th>
+        <th>السعر</th>
+        <th>الإحمالى</th>
+        <th></th>
+      </tr>
+    </thead>
+    
+    <tbody>
+    </tbody>
+  </table>
+  <row>
+      <label>التوصيل</label>
+      <input type="number" id="D5">
+      <label>الخصم</label>
+      <input type="number" id="D6">
+    </row>
 
-        console.log("تم تطبيق CSS تلقائيًا!");
-    } else {
-        console.log("لا يوجد CSS محفوظ");
+    <table id="resultsTable2">
+    <thead>
+      <tr>
+        <th>ثمن الأصناف</th>
+        <th>التوصيل</th>
+        <th>الخصم</th>
+        <th>المطلوب</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+    </tbody>
+  </table>
+
+  
+
+  
+    
+
+    <row style="gap: 20px">
+      <button class="B_Any" style="width: 100%;background-color: rgb(35, 143, 65)" onclick="sendData()" >حفظ</button>
+    </row>
+
+
+<div id="loadingOverlay" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:1.5em;
+">
+    برجاء الإنتظار...
+</div>
+
+
+
+<!-- Popup للـ Clients_List (مرتبط بالـ input id CL) -->
+<div id="popup_CL" class="popup" hidden="true">
+  <div class="popup-content" role="dialog" aria-labelledby="title_CL">
+    <h3 id="title_CL">قائمة العملاء</h3>
+
+    <input type="text" id="search_CL" class="search-box" placeholder="ابحث عن اسم العميل..." oninput="filterList('popup_CL', this.value)">
+
+    <div class="popup-list" id="list_CL">
+      <!-- سيتم ملؤه تلقائيًا بواسطة JS -->
+    </div>
+
+    <div id="no_CL" class="no-results" style="display:none;">لا توجد نتائج</div>
+  </div>
+</div>
+
+<!-- Popup للـ Products_List (مرتبط بالـ input id D1) -->
+<div id="popup_D1" class="popup" hidden="true">
+  <div class="popup-content" role="dialog" aria-labelledby="title_D1">
+    <h3 id="title_D1">قائمة المنتجات</h3>
+
+    <input type="text" id="search_D1" class="search-box" placeholder="ابحث عن المنتج..." oninput="filterList('popup_D1', this.value)">
+
+    <div class="popup-list" id="list_D1">
+    </div>
+
+    <div id="no_D1" class="no-results" style="display:none;">لا توجد نتائج</div>
+  </div>
+</div>
+
+  
+    
+<script >
+
+async function SaveAndRunJS() {
+    // تحميل وحفظ
+    if (!localStorage.getItem("Java_Constans.js")) {
+        try {
+            const res = await fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Java_Constans.js");
+            const content = await res.text();
+            localStorage.setItem("Java_Constans.js", content);
+            setTimeout(() => console.log("تم حفظ ملف Java_Constans.js بنجاح ✅"), 4000);
+        } catch (e) {
+            console.error("فشل تحميل ملف ❌", e);
+        }
     }
 
-
-
-function selectClient(val) {
-    document.getElementById("Cl").value = val;
-    const index = ClientsList.findIndex(row => row[0] === val);
-    document.getElementById("Cl_Phone").value = (index >= 0) ? ClientsList[index][1] || "" : "";
-    document.getElementById("Cl_Address").value = (index >= 0) ? ClientsList[index][2] || "" : "";
-
-    closePopup("popup_CL");
+    // تشغيل JS بعد الحفظ
+    const savedJS1 = localStorage.getItem("Java_Constans.js") || "";
+    const savedJS2 = localStorage.getItem("New_Order_Js.js") || "";
+    const script = document.createElement("script");
+    script.id = "myScript";
+    script.textContent = savedJS1 + "\n" + savedJS2;
+    document.body.appendChild(script);
+    console.log("JS تم تشغيله تلقائيًا!");
 }
 
-function selectProduct(val) {
-    document.getElementById("D1").value = val;
-    const index = ProductList.findIndex(row => row[0] === val);
-    document.getElementById("D3").value = (index >= 0) ? ProductList[index][1] || 0 : 0;
-    closePopup("popup_D1");
+SaveAndRunJS();
 
-    
-
-    
-}
-
-function attachButtons(listContainer, type) {
-    const buttons = listContainer.querySelectorAll(".item-btn");
-    buttons.forEach(btn => {
-        btn.onclick = null;
-        btn.addEventListener("click", function () {
-            const val = this.innerText.trim();
-            if (type === 'CL') selectClient(val);
-            else if (type === 'Pr') selectProduct(val);
-        });
-    });
-}
-
-const ClientsList = JSON.parse(localStorage.getItem("Clients_LD"));
-
-const list_CL = document.getElementById("list_CL");
-list_CL.innerHTML = ClientsList.map(p => `<button class="item-btn">${p[0]}</button>`).join('');
-attachButtons(list_CL, 'CL');
-document.getElementById("Cl").addEventListener("click", () => {
-    document.getElementById("popup_CL").style.display = 'flex';});
-
-
-const ProductList = JSON.parse(localStorage.getItem("Products_LD"));
-
-const list_Pr = document.getElementById("list_D1");
-list_Pr.innerHTML = ProductList.map(p => `<button class="item-btn">${p[0]}</button>`).join('');
-attachButtons(list_Pr, 'Pr');
-
-
-
-document.getElementById("Cl").addEventListener("click", () => {
-    document.getElementById("popup_CL").style.display = 'flex';});
-
-document.getElementById("D1").addEventListener("click", () => {
-    document.getElementById("popup_D1").style.display = 'flex';
-});
-
-
-
-// === إغلاق Popup عند الضغط خارج المحتوى ===
-document.querySelectorAll(".popup").forEach(p => {
-    p.addEventListener("click", e => {
-        if (e.target === p) closePopup(p.id);
-    });
-});
-function closePopup(id) {
-    const p = document.getElementById(id);
-    p.style.display = "none";
-    p.hidden = true;}
-
-
-// === فلترة البحث داخل كل Popup ===
-function filterList(popupId, text) {
-    const p = document.getElementById(popupId);
-    if (!p) return;
-    const items = p.querySelectorAll(".item-btn");
-    const noElem = p.querySelector(".no-results");
-    const q = text.trim().toLowerCase();
-    let shown = 0;
-
-    items.forEach(btn => {
-        const itemText = btn.innerText.trim().toLowerCase();
-        if (q === "" || itemText.includes(q)) {
-            btn.style.display = "block";
-            shown++;
-        } else btn.style.display = "none";
-    });
-
-    if (noElem) noElem.style.display = (shown === 0) ? "block" : "none";
-
-}
-
-
-
-
-
-let Order_Data = [];
-let summ = 0;
-
-
-// === إضافة صف إلى الجدول ===
-function addToTable() {
-    const D1 = document.getElementById("D1").value;
-    const D2 = Number(document.getElementById("D2").value);
-    const D3 = Number(document.getElementById("D3").value);
-    if (!D1 || !D2 || !D3) return;
-    Order_Data.push([D1, D2, D3, D2 * D3]);
-    updateTable();
-}
-
-// === تحديث الجدول ===
-function updateTable() {
-    const tbody = document.querySelector("#resultsTable tbody");
-    tbody.innerHTML = "";
-    summ = Order_Data.reduce((sum, row) => sum + Number(row[3]), 0);
-    Order_Data.forEach((row, i) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td>
-                        <td class="deleteBtn" onclick="deleteRow(${i})">X</td>`;
-        tbody.appendChild(tr);
-    });
-    updateSummary();
-}
-
-// === حذف صف ===
-function deleteRow(i) {
-    if (confirm("هل أنت متأكد؟")) {
-        Order_Data.splice(i, 1);
-        updateTable();
-    }
-}
-
-// === تحديث ملخص الطلب ===
-function updateSummary() {
-    const D5 = Number(document.getElementById("D5").value || 0);
-    const D6 = Number(document.getElementById("D6").value || 0);
-    const tbody2 = document.querySelector("#resultsTable2 tbody");
-    tbody2.innerHTML = `<tr><td>${summ}</td><td>${D5}</td><td>${D6}</td><td>${summ + D5 - D6}</td></tr>`;
-}
-
-// === تحديث ملخص الطلب عند تغيير التوصيل أو الخصم تلقائياً ===
-document.getElementById("D5").addEventListener("input", updateSummary);
-document.getElementById("D6").addEventListener("input", updateSummary);
-
-
-
-
-
-function sendData() {
-    
-    
-
-    const D5 = Number(document.getElementById("D5").value || 0);
-    const D6 = Number(document.getElementById("D6").value || 0);
-    const totalRequired = summ + D5 - D6;
-
-    const today = new Date();
-    const invoiceNumber = 1;
-
-
-    const The_Order = JSON.parse(localStorage.getItem("Orders_LD"))||[];
-    The_Order.push(
-    [
-        invoiceNumber,
-        today.toLocaleDateString(),
-        document.getElementById("Cl").value,
-        document.getElementById("Cl_Phone").value,
-        document.getElementById("Cl_Address").value,
-        summ,
-        D5,
-        D6,
-        totalRequired,
-        Order_Data]);
-
-    localStorage.setItem("Orders_LD", JSON.stringify(The_Order));
-
-
-
-
-}
+</script>
+</body>
+</html>
