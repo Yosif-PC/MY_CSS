@@ -41,13 +41,10 @@ Save_content_From_URL("style.css");
 Save_content_From_URL("Home_Js.js");
 Save_content_From_URL("New_Order_Js.js");
 
-if (localStorage.getItem("Clients_LD")){
-localStorage.setItem("Clients_LD", [])
+if (!localStorage.getItem("Clients_LD")){
+localStorage.setItem("Clients_LD", "[]")
 }
 
-if (localStorage.getItem("products_LD")){
-localStorage.setItem("products_LD", [])
+if (!localStorage.getItem("products_LD")){
+localStorage.setItem("products_LD", "[]")
 }
-
-
-
