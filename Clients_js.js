@@ -83,5 +83,6 @@ renderTable();
   function sendClientsData() {
 
     localStorage.setItem("Clients_LD", JSON.stringify(ClientsList));
+    alert("تم الحفظ بنجاح");
 
   }
