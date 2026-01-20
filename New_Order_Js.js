@@ -57,7 +57,7 @@ document.getElementById("Cl").addEventListener("click", () => {
     document.getElementById("popup_CL").style.display = 'flex';});
 
 
-const ProductList = JSON.parse(localStorage.getItem("products_LD"));
+const ProductList = JSON.parse(localStorage.getItem("Products_LD"));
 
 const list_Pr = document.getElementById("list_D1");
 list_Pr.innerHTML = ProductList.map(p => `<button class="item-btn">${p[0]}</button>`).join('');
