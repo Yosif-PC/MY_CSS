@@ -36,18 +36,9 @@
         <th>الهاتف</th>
         <th></th>
       </tr>
+      <tbody></tbody>
     </thead>
     
-    <tbody>
-        {% for item in Clients_Data %}
-        <tr>
-          <td>{{ item[0] }}</td>
-          <td>{{ item[1] }}</td>
-          <td>{{ item[2] }}</td>
-          <td class="deleteBtn" onclick="deleteRow(this)">X</td>
-        </tr>
-        {% endfor %}
-    </tbody>
   </table>
 
 
@@ -55,52 +46,28 @@
 </html>
 
 <script>
-  function addToClientsTable(){
-    
-    let C1 =document.getElementById("C1").value;
-    let C2 =document.getElementById("C2").value;
-    let C3 =Number(document.getElementById("C3").value);
-    if (C1 === "" || C2 === "" || C3 === 0) return;
-    Clients_Data.push([C1,C2,C3])
+async function SaveAndRunJS() {
+    // تحميل وحفظ
+    if (!localStorage.getItem("Java_Constans.js")) {
+        try {
+            const res = await fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Java_Constans.js");
+            const content = await res.text();
+            localStorage.setItem("Java_Constans.js", content);
+            setTimeout(() => console.log("تم حفظ ملف Java_Constans.js بنجاح ✅"), 4000);
+        } catch (e) {
+            console.error("فشل تحميل ملف ❌", e);
+        }
+    }
 
-    let tbody = document.querySelector("#ClientsTable tbody");
-    let row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${C1}</td>
-      <td>${C2}</td>
-      <td>${C3}</td>
-      <td class="deleteBtn" onclick="deleteRow(this)">X</td>
-    `;
-    tbody.appendChild(row);
-  }
+    // تشغيل JS بعد الحفظ
+    const savedJS1 = localStorage.getItem("Java_Constans.js") || "";
+    const savedJS2 = localStorage.getItem("Clients_js.js") || "";
+    const script = document.createElement("script");
+    script.id = "myScript";
+    script.textContent = savedJS1 + "\n" + savedJS2;
+    document.body.appendChild(script);
+    console.log("JS تم تشغيله تلقائيًا!");
+}
 
-   function deleteRow(el) {
-
-    // رسالة التأكيد
-    let result = confirm("هل أنت متأكد؟");
-
-    if(result) {
-        // المستخدم ضغط OK → نفذ الأمر
-        let row = el.parentNode;
-        let index = Array.from(row.parentNode.children).indexOf(row);
-        Clients_Data.splice(index, 1); // حذف الصف من المصفوفة
-        row.remove();
-
-    } 
-    
-  }
-
-  function sendClientsData() {
-
-    fetch("/receive_NewClientsData", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({Clients_Data:Clients_Data}) // إرسال كل الصفوف كاملة
-    })
-    .then(r => r.json())
-    .then(d => alert(d.message))
-    .catch(() => alert("حدث خطأ أثناء الإرسال!"));
-  }
-
-
+SaveAndRunJS();
 </script>
