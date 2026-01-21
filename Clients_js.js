@@ -18,11 +18,11 @@ const cssContent = localStorage.getItem("style.css");
 
 const table = document.getElementById("ClientsTable");
 const tbody = table.querySelector("tbody");
-const ClientsList = JSON.parse(localStorage.getItem("Clients_LD"));
+const ClientsList = JSON.parse(localStorage.getItem("Clients_LD"))|| [];
 
 // رسم الجدول
 function renderTable() {
-  tbody.innerHTML = ClientsList.map((item, index) => `
+  tbody.innerHTML = ClientsList.map((item) => `
     <tr>
       <td>${item[0]}</td>
       <td>${item[1]}</td>
@@ -81,8 +81,7 @@ renderTable();
   }
 
   function sendClientsData() {
-
-    localStorage.setItem("Clients_LD", JSON.stringify(ClientsList));
     alert("تم الحفظ بنجاح");
+    localStorage.setItem("Clients_LD", JSON.stringify(ClientsList));
 
   }
