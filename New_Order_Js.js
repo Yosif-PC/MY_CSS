@@ -176,7 +176,7 @@ function sendData() {
 
 
     const The_Order = JSON.parse(localStorage.getItem("Orders_LD"))||[];
-    const invoiceNumber = The_Order.length + 1;
+    const invoiceNumber = Number(localStorage.getItem("Last_Invoice_Number"))+1 || 1;
     document.getElementById("invoice").textContent = "فاتورة رقم : " + invoiceNumber;
 
     The_Order.push(
@@ -192,6 +192,7 @@ function sendData() {
         totalRequired,
         Order_Data]);
 
+    localStorage.setItem("Last_Invoice_Number", invoiceNumber);
     localStorage.setItem("Orders_LD", JSON.stringify(The_Order));
 
 
