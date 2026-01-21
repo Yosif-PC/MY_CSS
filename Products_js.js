@@ -18,7 +18,7 @@ const cssContent = localStorage.getItem("style.css");
 
 const table = document.getElementById("ProductsTable");
 const tbody = table.querySelector("tbody");
-const ProductsList = JSON.parse(localStorage.getItem("Products_LD"));
+const ProductsList = JSON.parse(localStorage.getItem("Products_LD"))|| [];
 
 // رسم الجدول
 function renderTable() {
@@ -80,4 +80,5 @@ renderTable();
   function sendProductsData() {
     localStorage.setItem("Products_LD", JSON.stringify(ProductsList));
     alert("تم الحفظ بنجاح");
+
   }
