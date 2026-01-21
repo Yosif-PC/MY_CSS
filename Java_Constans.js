@@ -45,9 +45,6 @@ Save_content_From_URL("Clients_js.js");
 Save_content_From_URL("Products_js.js");
 Save_content_From_URL("Accept_Orders_js.js");
 
-if (!localStorage.getItem("Clients_LD")){
-localStorage.setItem("Clients_LD", "[]")
-}
 
 if (!localStorage.getItem("Products_LD")){
 localStorage.setItem("Products_LD", "[]")
