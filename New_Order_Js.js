@@ -162,7 +162,6 @@ document.getElementById("D6").addEventListener("input", updateSummary);
 
 
 
-
 function sendData() {
     
     
@@ -172,10 +171,14 @@ function sendData() {
     const totalRequired = summ + D5 - D6;
 
     const today = new Date();
-    const invoiceNumber = 1;
+    
+    
 
 
     const The_Order = JSON.parse(localStorage.getItem("Orders_LD"))||[];
+    const invoiceNumber = The_Order.length + 1;
+    document.getElementById("invoice").textContent = "فاتورة رقم : " + invoiceNumber;
+
     The_Order.push(
     [
         invoiceNumber,
