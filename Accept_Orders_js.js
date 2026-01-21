@@ -67,7 +67,6 @@ function filterInvoiceList(text) {
 
   renderInvoiceList(filtered);
 }
-
 // اختيار فاتورة
 function selectInvoice(invoiceNumber) {
   const row = invoicesData.find(r => r[0] == invoiceNumber);
@@ -75,8 +74,8 @@ function selectInvoice(invoiceNumber) {
 
   fillInvoice(row);
   closePopup();
+  return row;
 }
-
 // ملء الجداول
 function fillInvoice(row) {
   document.getElementById("invoiceInfo").innerHTML = `
@@ -123,6 +122,88 @@ items.forEach(item => {
   `;
 }
 
+
+function Accepted() {
+    
+    // 1️⃣ جلب بيانات الطلبات المقبولة
+const Accept_Order = JSON.parse(localStorage.getItem("Accept_Order_LD")) || [];
+
+// 2️⃣ تحديد رقم الفاتورة من الجدول
+const invoiceNumber = document.querySelector("#invoiceInfo tr").cells[0].innerText;
+
+// 3️⃣ جلب الصف المطلوب من Orders_LD
+let Orders_LD = JSON.parse(localStorage.getItem("Orders_LD")) || [];
+const rowToRemove = Orders_LD.find(r => r[0] == invoiceNumber); // استخدم == بدل ===
+
+// 4️⃣ أضف للطلبات المقبولة
+if(rowToRemove){
+    Accept_Order.push(rowToRemove);
+    localStorage.setItem("Accept_Order_LD", JSON.stringify(Accept_Order));
+
+    // 5️⃣ حذف الصف من Orders_LD
+    Orders_LD = Orders_LD.filter(row => 
+        row.map(String).join(",") !== rowToRemove.map(String).join(",")
+    );
+    localStorage.setItem("Orders_LD", JSON.stringify(Orders_LD));
+
+    alert("تم قبول الطلب");
+    window.location.reload()
+}else{
+    alert("لم يتم العثور على الفاتورة");
+}
+
+}
+
+
+function Rejected() {
+    
+// 2️⃣ تحديد رقم الفاتورة من الجدول
+const invoiceNumber = document.querySelector("#invoiceInfo tr").cells[0].innerText;
+
+// 3️⃣ جلب الصف المطلوب من Orders_LD
+let Orders_LD = JSON.parse(localStorage.getItem("Orders_LD")) || [];
+const rowToRemove = Orders_LD.find(r => r[0] == invoiceNumber); // استخدم == بدل ===
+
+// 4️⃣ أضف للطلبات المقبولة
+if(rowToRemove){
+    // 5️⃣ حذف الصف من Orders_LD
+    Orders_LD = Orders_LD.filter(row => 
+        row.map(String).join(",") !== rowToRemove.map(String).join(",")
+    );
+    localStorage.setItem("Orders_LD", JSON.stringify(Orders_LD));
+
+    alert("تم رفض الطلب");
+    window.location.reload();
+}else{
+    alert("لم يتم العثور على الفاتورة");
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Open_Whatsapp() {
+  window.open(`https://wa.me/2${document.querySelector("#clientInfo tr").cells[1].innerText}`, "_blank");
+}
+
+
+
+
+
+
+
+
+
 // إغلاق Popup
 function closePopup() {
   document.getElementById("popup_invoices").style.display = "none";
@@ -130,6 +211,7 @@ function closePopup() {
 
 // تحميل الفواتير عند فتح الصفحة
 window.addEventListener("load", loadInvoices);
+
 
 
 document.getElementById("window.print").addEventListener("click", () => {
