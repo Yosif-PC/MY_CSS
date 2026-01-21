@@ -81,15 +81,40 @@
 </bodyPrint>
 
 <row>
-  <button class="B_Any" style="width: 100%;  height:60px" >✔️</button>
-  <button class="B_Any" style="width: 100%; height:60px" >❌</button>
-  <button class="B_Any" style="width: 100%; height:60px" >💬</button>
-  <button class="B_Any" style="width: 100%; color: rgb(25, 116, 235); height:60px" >❯❯</button>
+  <button class="B_Any" style="width: 100%;  height:60px" onclick="Accepted()">✔️</button>
+  <button class="B_Any" style="width: 100%; height:60px" onclick="Rejected()">❌</button>
+  <button class="B_Any" style="width: 100%; height:60px" onclick="Open_Whatsapp()">💬</button>
+  <button class="B_Any" style="width: 100%; color: rgb(25, 116, 235); height:60px" onclick="BackInvoice()">❯❯</button>
   <button class="B_Any" style="width: 100%;  height:60px" id="window.print">💾</button>
 
 
 </row>
+<script>
+async function SaveAndRunJS() {
+    // تحميل وحفظ
+    if (!localStorage.getItem("Java_Constans.js")) {
+        try {
+            const res = await fetch("https://raw.githubusercontent.com/Yosif-PC/MY_CSS/main/Java_Constans.js");
+            const content = await res.text();
+            localStorage.setItem("Java_Constans.js", content);
+            setTimeout(() => console.log("تم حفظ ملف Java_Constans.js بنجاح ✅"), 4000);
+        } catch (e) {
+            console.error("فشل تحميل ملف ❌", e);
+        }
+    }
 
-<script src="Accept_Orders_js.js"></script>
+    // تشغيل JS بعد الحفظ
+    const savedJS1 = localStorage.getItem("Java_Constans.js") || "";
+    const savedJS2 = localStorage.getItem("Accept_Orders_js.js") || "";
+    const script = document.createElement("script");
+    script.id = "myScript";
+    script.textContent = savedJS1 + "\n" + savedJS2;
+    document.body.appendChild(script);
+    console.log("JS تم تشغيله تلقائيًا!");
+}
+
+SaveAndRunJS();
+
+</script>
 </body>
 </html>
